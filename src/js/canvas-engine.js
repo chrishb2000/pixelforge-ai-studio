@@ -1,6 +1,8 @@
 /* Fabric.js Canvas Engine Wrapper */
 const CanvasEngine = {
   canvas: null,
+  currentDpi: 72,
+  isTransparentBg: false,
 
   init(canvasId) {
     this.canvas = new fabric.Canvas(canvasId, {
@@ -8,13 +10,20 @@ const CanvasEngine = {
       backgroundColor: '#ffffff'
     });
 
-    this.setPresetResolution(1920, 1080);
+    this.setPresetResolution(1920, 1080, 72);
     this.bindEvents();
   },
 
-  setPresetResolution(width, height) {
+  setPresetResolution(width, height, dpi = 72) {
+    this.currentDpi = dpi;
     this.canvas.setWidth(width);
     this.canvas.setHeight(height);
+
+    if (this.isTransparentBg) {
+      this.canvas.setBackgroundColor(null, () => this.canvas.renderAll());
+    } else {
+      this.canvas.setBackgroundColor('#ffffff', () => this.canvas.renderAll());
+    }
 
     const wrapper = document.getElementById('canvas-wrapper');
     if (wrapper) {
@@ -24,11 +33,52 @@ const CanvasEngine = {
 
     const dimText = document.getElementById('canvas-dimensions-text');
     if (dimText) {
-      dimText.textContent = `Resolución: ${width} x ${height} px`;
+      dimText.textContent = `Resolución: ${width} x ${height} px (${dpi} DPI)`;
+    }
+
+    const exportInfo = document.getElementById('export-info-text');
+    if (exportInfo) {
+      exportInfo.textContent = `Dimensiones: ${width} x ${height} px @ ${dpi} DPI / PPX`;
     }
 
     this.fitCanvasToViewport();
     this.canvas.renderAll();
+  },
+
+  setTransparentBackground(isTransparent) {
+    this.isTransparentBg = isTransparent;
+    const wrapper = document.getElementById('canvas-wrapper');
+    const statusText = document.getElementById('transparency-status-text');
+
+    if (isTransparent) {
+      this.canvas.setBackgroundColor(null, () => this.canvas.renderAll());
+      if (wrapper) wrapper.classList.add('transparent-bg');
+      if (statusText) {
+        statusText.textContent = 'ON (PNG Alfa)';
+        statusText.style.color = 'var(--success-color)';
+      }
+    } else {
+      const pickerColor = document.getElementById('canvas-bg-color-picker')?.value || '#ffffff';
+      this.canvas.setBackgroundColor(pickerColor, () => this.canvas.renderAll());
+      if (wrapper) wrapper.classList.remove('transparent-bg');
+      if (statusText) {
+        statusText.textContent = 'OFF';
+        statusText.style.color = 'inherit';
+      }
+    }
+  },
+
+  setCanvasBackgroundColor(colorHex) {
+    this.isTransparentBg = false;
+    const wrapper = document.getElementById('canvas-wrapper');
+    const statusText = document.getElementById('transparency-status-text');
+    if (wrapper) wrapper.classList.remove('transparent-bg');
+    if (statusText) {
+      statusText.textContent = 'OFF';
+      statusText.style.color = 'inherit';
+    }
+
+    this.canvas.setBackgroundColor(colorHex, () => this.canvas.renderAll());
   },
 
   fitCanvasToViewport() {
@@ -79,7 +129,7 @@ const CanvasEngine = {
       left: this.canvas.width / 2 - 150,
       top: this.canvas.height / 2 - 40,
       fontFamily: 'Montserrat',
-      fontSize: 64,
+      fontSize: Math.round(this.canvas.height * 0.06),
       fontWeight: 'bold',
       fill: '#ffffff',
       shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.6)', blur: 15, offsetX: 3, offsetY: 5 })
@@ -93,7 +143,7 @@ const CanvasEngine = {
       left: this.canvas.width / 2 - 120,
       top: this.canvas.height / 2 + 40,
       fontFamily: 'Poppins',
-      fontSize: 36,
+      fontSize: Math.round(this.canvas.height * 0.035),
       fontWeight: '600',
       fill: '#f8fafc'
     });
@@ -106,7 +156,7 @@ const CanvasEngine = {
       left: this.canvas.width / 2 - 140,
       top: this.canvas.height / 2 + 100,
       fontFamily: 'Inter',
-      fontSize: 24,
+      fontSize: Math.round(this.canvas.height * 0.025),
       fill: '#94a3b8'
     });
     this.canvas.add(text);
@@ -114,11 +164,12 @@ const CanvasEngine = {
   },
 
   addRectangle() {
+    const size = Math.round(this.canvas.width * 0.15);
     const rect = new fabric.Rect({
-      left: this.canvas.width / 2 - 100,
-      top: this.canvas.height / 2 - 100,
-      width: 200,
-      height: 200,
+      left: this.canvas.width / 2 - size / 2,
+      top: this.canvas.height / 2 - size / 2,
+      width: size,
+      height: size,
       fill: '#6366f1',
       rx: 12,
       ry: 12
@@ -128,10 +179,11 @@ const CanvasEngine = {
   },
 
   addCircle() {
+    const radius = Math.round(this.canvas.width * 0.08);
     const circle = new fabric.Circle({
-      left: this.canvas.width / 2 - 90,
-      top: this.canvas.height / 2 - 90,
-      radius: 90,
+      left: this.canvas.width / 2 - radius,
+      top: this.canvas.height / 2 - radius,
+      radius: radius,
       fill: '#a855f7'
     });
     this.canvas.add(circle);
@@ -139,27 +191,29 @@ const CanvasEngine = {
   },
 
   addBadge() {
+    const width = Math.round(this.canvas.width * 0.18);
+    const height = Math.round(this.canvas.height * 0.06);
     const group = new fabric.Group([
       new fabric.Rect({
-        width: 180,
-        height: 50,
+        width: width,
+        height: height,
         fill: '#ef4444',
-        rx: 25,
-        ry: 25
+        rx: height / 2,
+        ry: height / 2
       }),
       new fabric.Text('¡NUEVO PROMO!', {
-        fontSize: 16,
+        fontSize: Math.round(height * 0.4),
         fontFamily: 'Montserrat',
         fontWeight: 'bold',
         fill: '#ffffff',
         originX: 'center',
         originY: 'center',
-        left: 90,
-        top: 25
+        left: width / 2,
+        top: height / 2
       })
     ], {
-      left: this.canvas.width / 2 - 90,
-      top: this.canvas.height / 2 - 25
+      left: this.canvas.width / 2 - width / 2,
+      top: this.canvas.height / 2 - height / 2
     });
     this.canvas.add(group);
     this.canvas.setActiveObject(group);
@@ -167,8 +221,8 @@ const CanvasEngine = {
 
   addArrow() {
     const triangle = new fabric.Triangle({
-      width: 40,
-      height: 40,
+      width: Math.round(this.canvas.width * 0.05),
+      height: Math.round(this.canvas.width * 0.05),
       fill: '#10b981',
       angle: 90,
       left: this.canvas.width / 2,
@@ -178,12 +232,20 @@ const CanvasEngine = {
     this.canvas.setActiveObject(triangle);
   },
 
-  setBackgroundImage(dataUrl) {
+  setBackgroundImage(dataUrl, fitMode = 'fit') {
     fabric.Image.fromURL(dataUrl, (img) => {
-      // Scale image to fit canvas nicely
-      const scaleX = this.canvas.width / img.width;
-      const scaleY = this.canvas.height / img.height;
-      const scale = Math.min(scaleX, scaleY);
+      let scale;
+      if (fitMode === 'fill') {
+        const scaleX = this.canvas.width / img.width;
+        const scaleY = this.canvas.height / img.height;
+        scale = Math.max(scaleX, scaleY);
+      } else if (fitMode === 'fit') {
+        const scaleX = this.canvas.width / img.width;
+        const scaleY = this.canvas.height / img.height;
+        scale = Math.min(scaleX, scaleY);
+      } else {
+        scale = 1;
+      }
 
       img.set({
         originX: 'center',
@@ -243,7 +305,11 @@ const CanvasEngine = {
 
   clear() {
     this.canvas.clear();
-    this.canvas.setBackgroundColor('#ffffff', () => this.canvas.renderAll());
+    if (this.isTransparentBg) {
+      this.canvas.setBackgroundColor(null, () => this.canvas.renderAll());
+    } else {
+      this.canvas.setBackgroundColor('#ffffff', () => this.canvas.renderAll());
+    }
   }
 };
 

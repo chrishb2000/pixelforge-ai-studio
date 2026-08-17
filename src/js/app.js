@@ -21,16 +21,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Preset Resolution Selector
   const presetSelect = document.getElementById('canvas-preset');
+  const customDimModal = document.getElementById('custom-dim-modal');
+  const openCustomDimBtn = document.getElementById('open-custom-dim-btn');
+
   if (presetSelect) {
     presetSelect.addEventListener('change', (e) => {
       const val = e.target.value;
-      if (val === 'youtube-thumb') CanvasEngine.setPresetResolution(1920, 1080);
-      else if (val === 'insta-post') CanvasEngine.setPresetResolution(1080, 1080);
-      else if (val === 'insta-story') CanvasEngine.setPresetResolution(1080, 1920);
-      else if (val === 'banner') CanvasEngine.setPresetResolution(1200, 400);
-      else if (val === 'custom') CanvasEngine.setPresetResolution(3840, 2160);
+      if (openCustomDimBtn) openCustomDimBtn.style.display = (val === 'custom') ? 'inline-flex' : 'none';
+
+      if (val === 'youtube-thumb') CanvasEngine.setPresetResolution(1920, 1080, 72);
+      else if (val === 'insta-post') CanvasEngine.setPresetResolution(1080, 1080, 72);
+      else if (val === 'insta-story') CanvasEngine.setPresetResolution(1080, 1920, 72);
+      else if (val === 'banner') CanvasEngine.setPresetResolution(1200, 400, 72);
+      else if (val === 'custom-print') CanvasEngine.setPresetResolution(4500, 5400, 400);
+      else if (val === 'custom') {
+        customDimModal?.classList.add('active');
+      }
     });
   }
+
+  // Open Custom Dimensions Modal Button
+  openCustomDimBtn?.addEventListener('click', () => {
+    customDimModal?.classList.add('active');
+  });
+
+  // Apply Custom Dimensions Handler
+  document.getElementById('apply-custom-dim-btn')?.addEventListener('click', () => {
+    const width = parseInt(document.getElementById('custom-width-input').value) || 4500;
+    const height = parseInt(document.getElementById('custom-height-input').value) || 5400;
+    const dpi = parseInt(document.getElementById('custom-dpi-select').value) || 400;
+
+    CanvasEngine.setPresetResolution(width, height, dpi);
+    customDimModal?.classList.remove('active');
+  });
+
+  // Transparent Background Toggle Buttons
+  const transToggleBtn = document.getElementById('transparent-bg-toggle-btn');
+  if (transToggleBtn) {
+    transToggleBtn.addEventListener('click', () => {
+      CanvasEngine.setTransparentBackground(!CanvasEngine.isTransparentBg);
+    });
+  }
+
+  document.getElementById('set-bg-solid-btn')?.addEventListener('click', () => {
+    const color = document.getElementById('canvas-bg-color-picker').value;
+    CanvasEngine.setCanvasBackgroundColor(color);
+  });
+
+  document.getElementById('set-bg-transparent-btn')?.addEventListener('click', () => {
+    CanvasEngine.setTransparentBackground(true);
+  });
+
+  document.getElementById('canvas-bg-color-picker')?.addEventListener('input', (e) => {
+    CanvasEngine.setCanvasBackgroundColor(e.target.value);
+  });
 
   // Scale Option Cards Handler
   let selectedScale = 2;
@@ -71,9 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const model = document.getElementById('ai-model-select').value;
         const sharpen = parseInt(sharpenRange.value);
+        const fitMode = document.getElementById('image-fit-mode-select').value;
 
         const result = await AIUpscaler.processUpscale(file, selectedScale, model, sharpen);
-        CanvasEngine.setBackgroundImage(result.upscaledDataUrl);
+        CanvasEngine.setBackgroundImage(result.upscaledDataUrl, fitMode);
 
         if (statusDot) statusDot.classList.remove('busy');
         if (statusText) statusText.textContent = `¡Imagen escalada exitosamente a ${result.width}x${result.height} px!`;
@@ -170,6 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const creditsModal = document.getElementById('credits-modal');
 
   document.getElementById('open-export-modal-btn')?.addEventListener('click', () => {
+    const exportInfo = document.getElementById('export-info-text');
+    if (exportInfo) {
+      exportInfo.textContent = `Dimensiones del Lienzo: ${CanvasEngine.canvas.width} x ${CanvasEngine.canvas.height} px @ ${CanvasEngine.currentDpi} DPI / PPX | Fondo Transparente: ${CanvasEngine.isTransparentBg ? 'SÍ (PNG Alfa)' : 'NO'}`;
+    }
     exportModal?.classList.add('active');
   });
 
@@ -181,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       exportModal?.classList.remove('active');
       creditsModal?.classList.remove('active');
+      customDimModal?.classList.remove('active');
     });
   });
 
@@ -189,10 +239,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const format = document.getElementById('export-format-select').value;
     const quality = parseInt(document.getElementById('export-quality-range').value) / 100;
 
-    let mimeType = 'image/png';
-    if (format === 'jpeg') mimeType = 'image/jpeg';
-    else if (format === 'webp') mimeType = 'image/webp';
-
     const dataUrl = CanvasEngine.canvas.toDataURL({
       format: format === 'pdf' ? 'png' : format,
       quality: quality,
@@ -200,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const link = document.createElement('a');
-    link.download = `pixelforge-design-${Date.now()}.${format === 'pdf' ? 'png' : format}`;
+    link.download = `pixelforge-${CanvasEngine.canvas.width}x${CanvasEngine.canvas.height}-${CanvasEngine.currentDpi}dpi-${Date.now()}.${format === 'pdf' ? 'png' : format}`;
     link.href = dataUrl;
     link.click();
 

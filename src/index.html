@@ -25,11 +25,18 @@
           <option value="insta-post">Instagram Post (1080x1080)</option>
           <option value="insta-story">Instagram Story (1080x1920)</option>
           <option value="banner">Banner Promocional (1200x400)</option>
-          <option value="custom">Personalizado 4K UHD</option>
+          <option value="custom-print">Personalizado Print/POD (4500x5400 @ 400 DPI)</option>
+          <option value="custom">Dimensiones Personalizadas...</option>
         </select>
+
+        <button id="open-custom-dim-btn" class="btn btn-icon" title="Configurar Dimensiones Exactas y DPI" style="width: 28px; height: 28px; display: none;">⚙️</button>
       </div>
 
       <div class="navbar-actions">
+        <button id="transparent-bg-toggle-btn" class="btn btn-secondary" title="Alternar Fondo Transparente / Color">
+          🏁 Fondo Transparente: <span id="transparency-status-text">OFF</span>
+        </button>
+
         <button id="theme-toggle-btn" class="btn btn-icon" title="Alternar Tema Claro/Oscuro">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -95,7 +102,16 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">Factor de Escalado</label>
+              <label class="form-label">Ajuste de Tamaño de Imagen</label>
+              <select id="image-fit-mode-select" class="form-control">
+                <option value="fit">Escalar y Ajustar al Lienzo (Fit)</option>
+                <option value="fill">Rellenar Lienzo Completo (Fill)</option>
+                <option value="original">Mantener Escala Original</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Factor de Escalado IA</label>
               <div class="grid-3">
                 <div class="option-card selected" data-scale="2">
                   <span class="option-title">2x HD</span>
@@ -131,13 +147,6 @@
             <button id="process-upscale-btn" class="btn btn-primary" style="width: 100%; padding: 12px;">
               ⚡ Procesar y Escalar con IA
             </button>
-
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
-
-            <div class="section-title">Procesamiento en Lote (Batch Queue)</div>
-            <div id="batch-queue-list" style="max-height: 120px; overflow-y: auto; font-size: 12px; color: var(--text-muted);">
-              No hay imágenes en cola.
-            </div>
           </section>
 
           <!-- TAB 2: TEXT STUDIO -->
@@ -173,11 +182,6 @@
                 <input type="color" id="text-bg-color-input" value="#6366f1" class="form-control" style="height: 38px; padding: 2px;">
               </div>
             </div>
-
-            <div class="form-group">
-              <label class="form-label">Sombra de Texto</label>
-              <button id="toggle-text-shadow-btn" class="btn btn-secondary">Activar / Desactivar Sombra</button>
-            </div>
           </section>
 
           <!-- TAB 3: GRAPHIC ELEMENTS -->
@@ -203,13 +207,29 @@
             </div>
           </section>
 
-          <!-- TAB 4: BG REMOVER -->
+          <!-- TAB 4: BG REMOVER & TRANSPARENCY -->
           <section id="tab-bgremover" class="panel-section">
-            <div class="section-title">Eliminador de Fondo Inteligente</div>
-            <p class="section-subtitle">Aísla el sujeto borrando fondos por selección de color o transparencia.</p>
+            <div class="section-title">Fondo y Transparencia del Lienzo</div>
+            <p class="section-subtitle">Configura fondos transparentes PNG o elimina fondos de imágenes.</p>
 
             <div class="form-group">
-              <label class="form-label">Color a Eliminar</label>
+              <label class="form-label">Modo de Fondo del Lienzo</label>
+              <div class="grid-2">
+                <button id="set-bg-solid-btn" class="btn btn-secondary">🎨 Color Sólido</button>
+                <button id="set-bg-transparent-btn" class="btn btn-primary">🏁 Transparente (PNG)</button>
+              </div>
+            </div>
+
+            <div class="form-group" id="canvas-bg-color-group">
+              <label class="form-label">Color de Fondo del Lienzo</label>
+              <input type="color" id="canvas-bg-color-picker" value="#ffffff" class="form-control" style="height: 38px; padding: 2px;">
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+
+            <div class="section-title">Eliminador de Fondo de Imagen (Croma)</div>
+            <div class="form-group">
+              <label class="form-label">Color a Eliminar de la Imagen</label>
               <input type="color" id="bg-remove-color" value="#ffffff" class="form-control" style="height: 38px; padding: 2px;">
             </div>
 
@@ -359,12 +379,51 @@
         <span id="status-text">Listo para crear y escalar.</span>
       </div>
 
-      <div id="canvas-dimensions-text">Resolución: 1920 x 1080 px</div>
+      <div id="canvas-dimensions-text">Resolución: 1920 x 1080 px (72 DPI)</div>
 
       <div>
         Desarrollado por <a href="https://christian-freelance.us/" target="_blank" class="author-link">Christian Herencia</a>
       </div>
     </footer>
+  </div>
+
+  <!-- MODAL CUSTOM DIMENSIONS -->
+  <div id="custom-dim-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Dimensiones Personalizadas y DPI / PPI</h3>
+        <button class="modal-close" data-close-modal="custom-dim-modal">&times;</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted);">
+        Introduce el tamaño exacto en píxeles y la densidad DPI (p. ej. 4500 x 5400 px @ 400 DPI para impresión / Merch by Amazon).
+      </p>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Ancho (px)</label>
+          <input type="number" id="custom-width-input" value="4500" min="100" max="10000" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Alto (px)</label>
+          <input type="number" id="custom-height-input" value="5400" min="100" max="10000" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Densidad de Impresión (DPI / PPI)</label>
+        <select id="custom-dpi-select" class="form-control">
+          <option value="400">400 DPI / PPX (Calidad de Impresión Ultra HD)</option>
+          <option value="300">300 DPI / PPX (Estándar Impresión / POD)</option>
+          <option value="150">150 DPI / PPX (Impresión Media)</option>
+          <option value="72">72 DPI / PPX (Pantalla / Web)</option>
+        </select>
+      </div>
+
+      <button id="apply-custom-dim-btn" class="btn btn-primary" style="padding: 12px;">
+        📐 Aplicar Nuevas Dimensiones
+      </button>
+    </div>
   </div>
 
   <!-- MODAL EXPORT -->
@@ -378,7 +437,7 @@
       <div class="form-group">
         <label class="form-label">Formato de Archivo</label>
         <select id="export-format-select" class="form-control">
-          <option value="png">PNG (Máxima calidad con transparencia)</option>
+          <option value="png">PNG (Máxima calidad con transparencia alfa 100%)</option>
           <option value="jpeg">JPG (Fotografía e imágenes optimizadas)</option>
           <option value="webp">WebP (Formato web moderno ultraligero)</option>
           <option value="pdf">PDF (Documento listo para impresión)</option>
@@ -388,6 +447,13 @@
       <div class="form-group" id="quality-group">
         <label class="form-label">Calidad de Compresión: <span id="export-quality-val">95%</span></label>
         <input type="range" id="export-quality-range" min="10" max="100" value="95">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Información de Exportación</label>
+        <div id="export-info-text" style="font-size: 12px; color: var(--text-muted); background: var(--bg-tertiary); padding: 10px; border-radius: 6px;">
+          Dimensiones: 1920 x 1080 px @ 72 DPI
+        </div>
       </div>
 
       <button id="confirm-export-btn" class="btn btn-primary" style="padding: 12px;">
