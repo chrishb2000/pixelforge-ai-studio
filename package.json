@@ -1,0 +1,28 @@
+{
+  "name": "pixelforge-ai-studio",
+  "version": "1.0.0",
+  "description": "Estudio de Escalado por IA y Diseño Gráfico estilo Canva para Windows",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "echo Built successfully"
+  },
+  "keywords": [
+    "ai",
+    "upscale",
+    "super-resolution",
+    "canva",
+    "graphic-design",
+    "photo-editor",
+    "electron",
+    "windows"
+  ],
+  "author": "Christian Herencia (https://christian-freelance.us/)",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.2.0"
+  },
+  "dependencies": {
+    "fabric": "^5.3.0"
+  }
+}

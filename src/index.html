@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PixelForge AI Studio - AI Image Upscaling & Canva Graphic Design Suite</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- Fabric.js Canvas Engine CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+      <div class="brand-section">
+        <div class="brand-logo">PF</div>
+        <div class="brand-title">PixelForge AI Studio</div>
+        <span class="brand-badge">v1.0 Pro</span>
+      </div>
+
+      <div class="preset-selector-group">
+        <label for="canvas-preset">Lienzo:</label>
+        <select id="canvas-preset" class="select-input">
+          <option value="youtube-thumb">YouTube Thumbnail (1920x1080)</option>
+          <option value="insta-post">Instagram Post (1080x1080)</option>
+          <option value="insta-story">Instagram Story (1080x1920)</option>
+          <option value="banner">Banner Promocional (1200x400)</option>
+          <option value="custom">Personalizado 4K UHD</option>
+        </select>
+      </div>
+
+      <div class="navbar-actions">
+        <button id="theme-toggle-btn" class="btn btn-icon" title="Alternar Tema Claro/Oscuro">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+
+        <button id="credits-btn" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+          Créditos & Donación
+        </button>
+
+        <button id="open-export-modal-btn" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Exportar Diseño
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="main-layout">
+      <!-- Left Sidebar Tools -->
+      <aside class="sidebar">
+        <nav class="sidebar-tabs">
+          <button class="tab-btn active" data-tab="tab-upscale">
+            <svg viewBox="0 0 24 24"><path d="M13 3L4 14h7v7l9-11h-6v-7z"/></svg>
+            Escalar IA
+          </button>
+          <button class="tab-btn" data-tab="tab-text">
+            <svg viewBox="0 0 24 24"><path d="M5 4v3h5v12h3V7h5V4H5z"/></svg>
+            Texto
+          </button>
+          <button class="tab-btn" data-tab="tab-elements">
+            <svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z M4 13h7v7H4z M13 13h7v7h-7z"/></svg>
+            Elementos
+          </button>
+          <button class="tab-btn" data-tab="tab-bgremover">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Fondo
+          </button>
+          <button class="tab-btn" data-tab="tab-filters">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            Filtros
+          </button>
+          <button class="tab-btn" data-tab="tab-watermark">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Marca Agua
+          </button>
+        </nav>
+
+        <div class="sidebar-content">
+          <!-- TAB 1: AI UPSCALE -->
+          <section id="tab-upscale" class="panel-section active">
+            <div class="section-title">Escalador por IA (Super-Resolution)</div>
+            <p class="section-subtitle">Mejora y aumenta la resolución de tus imágenes sin perder calidad.</p>
+
+            <div class="form-group">
+              <label class="form-label">Seleccionar Imagen Base</label>
+              <input type="file" id="image-upload-input" accept="image/*" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Factor de Escalado</label>
+              <div class="grid-3">
+                <div class="option-card selected" data-scale="2">
+                  <span class="option-title">2x HD</span>
+                  <span class="option-desc">Doble resolución</span>
+                </div>
+                <div class="option-card" data-scale="4">
+                  <span class="option-title">4x Ultra HD</span>
+                  <span class="option-desc">Cuádruple resolución</span>
+                </div>
+                <div class="option-card" data-scale="8">
+                  <span class="option-title">8x Extreme</span>
+                  <span class="option-desc">Máximo detalle 4K/8K</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Modelo de IA Especializado</label>
+              <select id="ai-model-select" class="form-control">
+                <option value="ultrasharp">UltraSharp Pro (Fotos & Paisajes)</option>
+                <option value="digital-art">Digital Art & Anime (Ilustraciones 2D)</option>
+                <option value="photo-restore">Photo Restoration (Fotos Antiguas / Ruido)</option>
+                <option value="color-boost">Color Restorer (Enriquecimiento Tonal)</option>
+                <option value="denoise">De-Noise & Soften (Eliminar Grano JPEG)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Enfoque y Nitidez Extra: <span id="sharpen-val">50%</span></label>
+              <input type="range" id="sharpen-range" min="0" max="100" value="50">
+            </div>
+
+            <button id="process-upscale-btn" class="btn btn-primary" style="width: 100%; padding: 12px;">
+              ⚡ Procesar y Escalar con IA
+            </button>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+
+            <div class="section-title">Procesamiento en Lote (Batch Queue)</div>
+            <div id="batch-queue-list" style="max-height: 120px; overflow-y: auto; font-size: 12px; color: var(--text-muted);">
+              No hay imágenes en cola.
+            </div>
+          </section>
+
+          <!-- TAB 2: TEXT STUDIO -->
+          <section id="tab-text" class="panel-section">
+            <div class="section-title">Estudio de Tipografía (Canva Text)</div>
+            <p class="section-subtitle">Añade títulos impactantes y subtítulos estilizados.</p>
+
+            <div class="grid-2">
+              <button id="add-heading-btn" class="btn btn-secondary">+ Título Principal</button>
+              <button id="add-subheading-btn" class="btn btn-secondary">+ Subtítulo</button>
+            </div>
+            <button id="add-body-btn" class="btn btn-secondary" style="width: 100%;">+ Texto Normal</button>
+
+            <div class="form-group">
+              <label class="form-label">Fuente de Google Fonts</label>
+              <select id="font-family-select" class="form-control">
+                <option value="Inter">Inter (Moderna & Limpia)</option>
+                <option value="Montserrat">Montserrat (Negrita & Titulares)</option>
+                <option value="Poppins">Poppins (Redondeada & Amigable)</option>
+                <option value="Oswald">Oswald (Condensada & Impactante)</option>
+                <option value="Playfair Display">Playfair Display (Elegante & Serif)</option>
+                <option value="Pacifico">Pacifico (Manuscrita / Cursiva)</option>
+              </select>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Color de Texto</label>
+                <input type="color" id="text-color-input" value="#ffffff" class="form-control" style="height: 38px; padding: 2px;">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Fondo Destacado</label>
+                <input type="color" id="text-bg-color-input" value="#6366f1" class="form-control" style="height: 38px; padding: 2px;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Sombra de Texto</label>
+              <button id="toggle-text-shadow-btn" class="btn btn-secondary">Activar / Desactivar Sombra</button>
+            </div>
+          </section>
+
+          <!-- TAB 3: GRAPHIC ELEMENTS -->
+          <section id="tab-elements" class="panel-section">
+            <div class="section-title">Elementos Gráficos y Formas</div>
+            <p class="section-subtitle">Inserta rectángulos, círculos, insignias y cintas.</p>
+
+            <div class="grid-2">
+              <button id="add-rect-btn" class="btn btn-secondary">⬛ Rectángulo</button>
+              <button id="add-circle-btn" class="btn btn-secondary">⚪ Círculo</button>
+              <button id="add-badge-btn" class="btn btn-secondary">⭐ Insignia Badge</button>
+              <button id="add-arrow-btn" class="btn btn-secondary">➡️ Flecha Promo</button>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Color del Elemento</label>
+              <input type="color" id="element-color-input" value="#6366f1" class="form-control" style="height: 38px; padding: 2px;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Opacidad: <span id="element-opacity-val">100%</span></label>
+              <input type="range" id="element-opacity-range" min="10" max="100" value="100">
+            </div>
+          </section>
+
+          <!-- TAB 4: BG REMOVER -->
+          <section id="tab-bgremover" class="panel-section">
+            <div class="section-title">Eliminador de Fondo Inteligente</div>
+            <p class="section-subtitle">Aísla el sujeto borrando fondos por selección de color o transparencia.</p>
+
+            <div class="form-group">
+              <label class="form-label">Color a Eliminar</label>
+              <input type="color" id="bg-remove-color" value="#ffffff" class="form-control" style="height: 38px; padding: 2px;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tolerancia de Color: <span id="bg-tolerance-val">30%</span></label>
+              <input type="range" id="bg-tolerance-range" min="1" max="100" value="30">
+            </div>
+
+            <button id="apply-bg-remove-btn" class="btn btn-primary" style="width: 100%;">
+              ✂️ Eliminar Fondo Seleccionado
+            </button>
+          </section>
+
+          <!-- TAB 5: FILTERS & COLOR GRADINGS -->
+          <section id="tab-filters" class="panel-section">
+            <div class="section-title">Filtros y Retoque Fotográfico</div>
+            <p class="section-subtitle">Aplica estilos cromáticos y ajustes de tono.</p>
+
+            <div class="form-group">
+              <label class="form-label">Presets Visuales</label>
+              <div class="grid-2">
+                <button class="btn btn-secondary filter-preset-btn" data-preset="normal">Normal</button>
+                <button class="btn btn-secondary filter-preset-btn" data-preset="cyberpunk">Cyberpunk</button>
+                <button class="btn btn-secondary filter-preset-btn" data-preset="vintage">Vintage Sepia</button>
+                <button class="btn btn-secondary filter-preset-btn" data-preset="golden">Golden Hour</button>
+                <button class="btn btn-secondary filter-preset-btn" data-preset="emerald">Esmeralda</button>
+                <button class="btn btn-secondary filter-preset-btn" data-preset="mono">Monocromo</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Brillo</label>
+              <input type="range" id="filter-brightness" min="-100" max="100" value="0">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Contraste</label>
+              <input type="range" id="filter-contrast" min="-100" max="100" value="0">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Saturación</label>
+              <input type="range" id="filter-saturation" min="-100" max="100" value="0">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Desenfoque (Blur)</label>
+              <input type="range" id="filter-blur" min="0" max="20" value="0">
+            </div>
+          </section>
+
+          <!-- TAB 6: WATERMARK STUDIO -->
+          <section id="tab-watermark" class="panel-section">
+            <div class="section-title">Generador de Marcas de Agua</div>
+            <p class="section-subtitle">Protege tu trabajo con texto o logos repetidos.</p>
+
+            <div class="form-group">
+              <label class="form-label">Texto de Marca de Agua</label>
+              <input type="text" id="watermark-text-input" value="© PixelForge AI Studio" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Opacidad: <span id="wm-opacity-val">30%</span></label>
+              <input type="range" id="wm-opacity-range" min="5" max="100" value="30">
+            </div>
+
+            <button id="apply-watermark-btn" class="btn btn-primary" style="width: 100%;">
+              💧 Estampar Marca de Agua
+            </button>
+          </section>
+        </div>
+      </aside>
+
+      <!-- Center Workbench Canvas View -->
+      <main class="workbench">
+        <!-- Canvas Bar -->
+        <div class="workbench-toolbar">
+          <div class="tool-group">
+            <button id="undo-btn" class="btn btn-icon" title="Deshacer (Ctrl+Z)">↩️</button>
+            <button id="redo-btn" class="btn btn-icon" title="Rehacer (Ctrl+Y)">↪️</button>
+            <button id="clear-canvas-btn" class="btn btn-secondary" style="font-size: 12px;">Limpiar Lienzo</button>
+          </div>
+
+          <div class="tool-group">
+            <button id="toggle-split-view-btn" class="btn btn-secondary" style="font-size: 12px;">
+              🔍 Comparar Antes / Después
+            </button>
+          </div>
+
+          <div class="tool-group">
+            <button id="zoom-out-btn" class="btn btn-icon" title="Alejar">-</button>
+            <span id="zoom-level-text" style="font-size: 12px; font-weight: 600; min-width: 45px; text-align: center;">100%</span>
+            <button id="zoom-in-btn" class="btn btn-icon" title="Acercar">+</button>
+            <button id="zoom-fit-btn" class="btn btn-secondary" style="font-size: 12px;">Ajustar</button>
+          </div>
+        </div>
+
+        <!-- Canvas Viewport -->
+        <div class="canvas-viewport">
+          <div id="canvas-wrapper" class="canvas-wrapper">
+            <canvas id="fabric-canvas" width="1920" height="1080"></canvas>
+            
+            <!-- Before/After Interactive Split Viewer -->
+            <div id="split-viewer" class="split-viewer-overlay">
+              <div class="split-label before">Original (Antes)</div>
+              <div class="split-label after">Escalado IA (Después)</div>
+              <div id="split-line" class="split-line" style="left: 50%;">
+                <div class="split-handle">↔</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Inspector Panel -->
+      <aside class="inspector">
+        <div class="inspector-title">Propiedades de Capa</div>
+
+        <div id="no-selection-msg" style="font-size: 12px; color: var(--text-muted);">
+          Haz clic en un objeto del lienzo para editar sus propiedades.
+        </div>
+
+        <div id="selection-inspector" style="display: none; flex-direction: column; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Orden de Capa</label>
+            <div class="grid-2">
+              <button id="bring-forward-btn" class="btn btn-secondary">⬆️ Traer al Frente</button>
+              <button id="send-backward-btn" class="btn btn-secondary">⬇️ Enviar Atrás</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Acciones</label>
+            <div class="grid-2">
+              <button id="duplicate-obj-btn" class="btn btn-secondary">📋 Duplicar</button>
+              <button id="delete-obj-btn" class="btn btn-secondary" style="color: var(--danger-color);">🗑️ Borrar</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Footer Bar -->
+    <footer class="footer-bar">
+      <div class="status-indicator">
+        <div id="status-dot" class="status-dot"></div>
+        <span id="status-text">Listo para crear y escalar.</span>
+      </div>
+
+      <div id="canvas-dimensions-text">Resolución: 1920 x 1080 px</div>
+
+      <div>
+        Desarrollado por <a href="https://christian-freelance.us/" target="_blank" class="author-link">Christian Herencia</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL EXPORT -->
+  <div id="export-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Exportar Diseño Final</h3>
+        <button class="modal-close" data-close-modal="export-modal">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Formato de Archivo</label>
+        <select id="export-format-select" class="form-control">
+          <option value="png">PNG (Máxima calidad con transparencia)</option>
+          <option value="jpeg">JPG (Fotografía e imágenes optimizadas)</option>
+          <option value="webp">WebP (Formato web moderno ultraligero)</option>
+          <option value="pdf">PDF (Documento listo para impresión)</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="quality-group">
+        <label class="form-label">Calidad de Compresión: <span id="export-quality-val">95%</span></label>
+        <input type="range" id="export-quality-range" min="10" max="100" value="95">
+      </div>
+
+      <button id="confirm-export-btn" class="btn btn-primary" style="padding: 12px;">
+        💾 Descargar y Guardar Imagen
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL CREDITS & SUPPORT -->
+  <div id="credits-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Acerca de PixelForge AI Studio</h3>
+        <button class="modal-close" data-close-modal="credits-modal">&times;</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+        <strong>PixelForge AI Studio v1.0</strong> combina algoritmos de IA de super-resolución con una suite gráfica interactiva para creadores de contenido, diseñadores y profesionales.
+      </p>
+
+      <div style="background-color: var(--bg-tertiary); padding: 14px; border-radius: var(--radius-md); font-size: 13px;">
+        <strong>Desarrollador:</strong> Christian Herencia<br>
+        <strong>Sitio Web:</strong> <a href="https://christian-freelance.us/" target="_blank" class="author-link">https://christian-freelance.us/</a>
+      </div>
+
+      <div style="text-align: center;">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+          ¿Te ha resultado útil esta aplicación? ¡Invítame a un café para apoyar el desarrollo continuo de software libre!
+        </p>
+        <a href="https://www.paypal.com/donate/?hosted_button_id=YC6YAWBQ7HNSS" target="_blank" class="paypal-btn">
+          ☕ Invitar un Café vía PayPal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/theme.js"></script>
+  <script src="js/canvas-engine.js"></script>
+  <script src="js/ai-upscaler.js"></script>
+  <script src="js/bg-remover.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/watermark.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
