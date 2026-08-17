@@ -208,6 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Zoom Controls Event Handlers
+  document.getElementById('zoom-in-btn')?.addEventListener('click', () => CanvasEngine.zoomIn());
+  document.getElementById('zoom-out-btn')?.addEventListener('click', () => CanvasEngine.zoomOut());
+  document.getElementById('zoom-fit-btn')?.addEventListener('click', () => CanvasEngine.zoomFit());
+
   // Canvas Toolbar Handlers
   document.getElementById('clear-canvas-btn')?.addEventListener('click', () => {
     if (confirm('¿Estás seguro de que deseas limpiar todo el lienzo?')) {

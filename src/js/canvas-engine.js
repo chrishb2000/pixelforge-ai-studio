@@ -4,6 +4,7 @@ const CanvasEngine = {
   currentDpi: 72,
   isTransparentBg: false,
   currentImageObject: null,
+  currentZoomScale: 1.0,
 
   init(canvasId) {
     this.canvas = new fabric.Canvas(canvasId, {
@@ -94,6 +95,32 @@ const CanvasEngine = {
     this.canvas.setBackgroundColor(colorHex, () => this.canvas.renderAll());
   },
 
+  applyZoomScale(scale) {
+    this.currentZoomScale = Math.min(Math.max(scale, 0.05), 5.0);
+    const wrapper = document.getElementById('canvas-wrapper');
+    if (wrapper) {
+      wrapper.style.transform = `scale(${this.currentZoomScale})`;
+      wrapper.style.transformOrigin = 'center center';
+    }
+
+    const zoomText = document.getElementById('zoom-level-text');
+    if (zoomText) {
+      zoomText.textContent = `${Math.round(this.currentZoomScale * 100)}%`;
+    }
+  },
+
+  zoomIn() {
+    this.applyZoomScale(this.currentZoomScale + 0.10);
+  },
+
+  zoomOut() {
+    this.applyZoomScale(this.currentZoomScale - 0.10);
+  },
+
+  zoomFit() {
+    this.fitCanvasToViewport();
+  },
+
   fitCanvasToViewport() {
     const viewport = document.querySelector('.canvas-viewport');
     if (!viewport) return;
@@ -105,22 +132,15 @@ const CanvasEngine = {
     const scaleY = availableHeight / this.canvas.height;
     const scale = Math.min(scaleX, scaleY, 1);
 
-    const wrapper = document.getElementById('canvas-wrapper');
-    if (wrapper) {
-      wrapper.style.transform = `scale(${scale})`;
-      wrapper.style.transformOrigin = 'center center';
-    }
-
-    const zoomText = document.getElementById('zoom-level-text');
-    if (zoomText) {
-      zoomText.textContent = `${Math.round(scale * 100)}%`;
-    }
+    this.applyZoomScale(scale);
   },
 
   bindEvents() {
     this.canvas.on('selection:created', (e) => this.onSelectionChange(e.selected[0]));
     this.canvas.on('selection:updated', (e) => this.onSelectionChange(e.selected[0]));
     this.canvas.on('selection:cleared', () => this.onSelectionCleared());
+
+    window.addEventListener('resize', () => this.fitCanvasToViewport());
   },
 
   onSelectionChange(obj) {
