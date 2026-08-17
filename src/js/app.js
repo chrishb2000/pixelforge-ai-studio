@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       else if (val === 'twitch-profile') CanvasEngine.setPresetResolution(800, 800, 72);
       else if (val === 'linkedin-post') CanvasEngine.setPresetResolution(1200, 627, 72);
       else if (val === 'linkedin-banner') CanvasEngine.setPresetResolution(1584, 396, 72);
-      else if (val === 'custom-print') CanvasEngine.setPresetResolution(4500, 5400, 400);
+      else if (val === 'custom-print') CanvasEngine.setPresetResolution(4500, 5400, 500);
       else if (val === 'custom') {
         customDimModal?.classList.add('active');
       }

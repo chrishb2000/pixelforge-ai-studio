@@ -1,6 +1,6 @@
 # 🚀 PixelForge AI Studio v1.1 Pro
 
-**PixelForge AI Studio** es una potente aplicación de escritorio para Windows centrada en el **escalado por Inteligencia Artificial, redimensión de alta precisión y gestión de transparencias**. Permite realizar super-resolución por IA (2x, 4x, 8x, UltraSharp, Digital Art, Photo Restore), redimensionar imágenes a resoluciones personalizadas exactas (p. ej. 4500 x 5400 px @ 400 DPI para Merch / POD / Impresión), aislar fondos transparentes PNG con canal alfa 100%, aplicar retoques cromáticos y exportar en múltiples formatos (PNG, JPG, WebP, PDF).
+**PixelForge AI Studio** es una potente aplicación de escritorio para Windows centrada en el **escalado por Inteligencia Artificial, redimensión de alta precisión y gestión de transparencias**. Permite realizar super-resolución por IA (2x, 4x, 8x, UltraSharp, Digital Art, Photo Restore), redimensionar imágenes a resoluciones personalizadas exactas (p. ej. 4500 x 5400 px @ 500 DPI para Merch / POD / Impresión), aislar fondos transparentes PNG con canal alfa 100%, aplicar retoques cromáticos y exportar en múltiples formatos (PNG, JPG, WebP, PDF).
 
 ![PixelForge AI Studio](https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
@@ -59,8 +59,8 @@
   - 🐦 **Twitter / X**: Post (1200×675), Encabezado (1500×500), Perfil (400×400).
   - 🟣 **Twitch**: Banner (1200×480), Perfil (800×800).
   - 💼 **LinkedIn**: Post (1200×627), Portada (1584×396).
-  - 👕 **Impresión / Merch POD**: Camisetas (4500×5400 @ 400 DPI).
-- **Dimensiones a la Medida**: Configura cualquier resolución de 100x100 a 10.000x10.000 píxeles y la densidad DPI (400 DPI Ultra HD, 300 DPI, 150 DPI, 72 DPI Web).
+  - 👕 **Impresión / Merch POD**: Camisetas (4500×5400 @ 500 DPI).
+- **Dimensiones a la Medida**: Configura cualquier resolución de 100x100 a 10.000x10.000 píxeles y la densidad DPI (500 DPI Ultra HD, 300 DPI, 150 DPI, 72 DPI Web).
 - **Modos de Ajuste**: Encajar al lienzo (*Fit*), Rellenar lienzo (*Fill*) o Mantener escala original.
 
 ### 🏁 3. Fondo Transparente PNG Alfa & Eliminación de Fondo Croma
