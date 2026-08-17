@@ -3,6 +3,7 @@ const CanvasEngine = {
   canvas: null,
   currentDpi: 72,
   isTransparentBg: false,
+  currentImageObject: null,
 
   init(canvasId) {
     this.canvas = new fabric.Canvas(canvasId, {
@@ -22,7 +23,8 @@ const CanvasEngine = {
     if (this.isTransparentBg) {
       this.canvas.setBackgroundColor(null, () => this.canvas.renderAll());
     } else {
-      this.canvas.setBackgroundColor('#ffffff', () => this.canvas.renderAll());
+      const pickerColor = document.getElementById('canvas-bg-color-picker')?.value || '#ffffff';
+      this.canvas.setBackgroundColor(pickerColor, () => this.canvas.renderAll());
     }
 
     const wrapper = document.getElementById('canvas-wrapper');
@@ -31,6 +33,14 @@ const CanvasEngine = {
       wrapper.style.height = height + 'px';
     }
 
+    // Sync input fields if available
+    const sideW = document.getElementById('sidebar-width-input');
+    const sideH = document.getElementById('sidebar-height-input');
+    const sideDpi = document.getElementById('sidebar-dpi-select');
+    if (sideW) sideW.value = width;
+    if (sideH) sideH.value = height;
+    if (sideDpi) sideDpi.value = dpi;
+
     const dimText = document.getElementById('canvas-dimensions-text');
     if (dimText) {
       dimText.textContent = `Resolución: ${width} x ${height} px (${dpi} DPI)`;
@@ -38,10 +48,13 @@ const CanvasEngine = {
 
     const exportInfo = document.getElementById('export-info-text');
     if (exportInfo) {
-      exportInfo.textContent = `Dimensiones: ${width} x ${height} px @ ${dpi} DPI / PPX`;
+      exportInfo.textContent = `Dimensiones del Lienzo: ${width} x ${height} px @ ${dpi} DPI / PPX`;
     }
 
     this.fitCanvasToViewport();
+    if (this.currentImageObject) {
+      this.fitCurrentImage('fit');
+    }
     this.canvas.renderAll();
   },
 
@@ -113,8 +126,16 @@ const CanvasEngine = {
   onSelectionChange(obj) {
     const noSelMsg = document.getElementById('no-selection-msg');
     const selInspector = document.getElementById('selection-inspector');
+    const imgPropsText = document.getElementById('img-props-text');
+
     if (noSelMsg) noSelMsg.style.display = 'none';
     if (selInspector) selInspector.style.display = 'flex';
+
+    if (imgPropsText && obj) {
+      const w = Math.round(obj.width * obj.scaleX);
+      const h = Math.round(obj.height * obj.scaleY);
+      imgPropsText.textContent = `Tamaño: ${w} x ${h} px | Posición: (${Math.round(obj.left)}, ${Math.round(obj.top)})`;
+    }
   },
 
   onSelectionCleared() {
@@ -124,179 +145,56 @@ const CanvasEngine = {
     if (selInspector) selInspector.style.display = 'none';
   },
 
-  addHeadingText() {
-    const text = new fabric.IText('Título Principal', {
-      left: this.canvas.width / 2 - 150,
-      top: this.canvas.height / 2 - 40,
-      fontFamily: 'Montserrat',
-      fontSize: Math.round(this.canvas.height * 0.06),
-      fontWeight: 'bold',
-      fill: '#ffffff',
-      shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.6)', blur: 15, offsetX: 3, offsetY: 5 })
-    });
-    this.canvas.add(text);
-    this.canvas.setActiveObject(text);
-  },
-
-  addSubheadingText() {
-    const text = new fabric.IText('Subtítulo Destacado', {
-      left: this.canvas.width / 2 - 120,
-      top: this.canvas.height / 2 + 40,
-      fontFamily: 'Poppins',
-      fontSize: Math.round(this.canvas.height * 0.035),
-      fontWeight: '600',
-      fill: '#f8fafc'
-    });
-    this.canvas.add(text);
-    this.canvas.setActiveObject(text);
-  },
-
-  addBodyText() {
-    const text = new fabric.IText('Escribe tu texto de ejemplo aquí...', {
-      left: this.canvas.width / 2 - 140,
-      top: this.canvas.height / 2 + 100,
-      fontFamily: 'Inter',
-      fontSize: Math.round(this.canvas.height * 0.025),
-      fill: '#94a3b8'
-    });
-    this.canvas.add(text);
-    this.canvas.setActiveObject(text);
-  },
-
-  addRectangle() {
-    const size = Math.round(this.canvas.width * 0.15);
-    const rect = new fabric.Rect({
-      left: this.canvas.width / 2 - size / 2,
-      top: this.canvas.height / 2 - size / 2,
-      width: size,
-      height: size,
-      fill: '#6366f1',
-      rx: 12,
-      ry: 12
-    });
-    this.canvas.add(rect);
-    this.canvas.setActiveObject(rect);
-  },
-
-  addCircle() {
-    const radius = Math.round(this.canvas.width * 0.08);
-    const circle = new fabric.Circle({
-      left: this.canvas.width / 2 - radius,
-      top: this.canvas.height / 2 - radius,
-      radius: radius,
-      fill: '#a855f7'
-    });
-    this.canvas.add(circle);
-    this.canvas.setActiveObject(circle);
-  },
-
-  addBadge() {
-    const width = Math.round(this.canvas.width * 0.18);
-    const height = Math.round(this.canvas.height * 0.06);
-    const group = new fabric.Group([
-      new fabric.Rect({
-        width: width,
-        height: height,
-        fill: '#ef4444',
-        rx: height / 2,
-        ry: height / 2
-      }),
-      new fabric.Text('¡NUEVO PROMO!', {
-        fontSize: Math.round(height * 0.4),
-        fontFamily: 'Montserrat',
-        fontWeight: 'bold',
-        fill: '#ffffff',
-        originX: 'center',
-        originY: 'center',
-        left: width / 2,
-        top: height / 2
-      })
-    ], {
-      left: this.canvas.width / 2 - width / 2,
-      top: this.canvas.height / 2 - height / 2
-    });
-    this.canvas.add(group);
-    this.canvas.setActiveObject(group);
-  },
-
-  addArrow() {
-    const triangle = new fabric.Triangle({
-      width: Math.round(this.canvas.width * 0.05),
-      height: Math.round(this.canvas.width * 0.05),
-      fill: '#10b981',
-      angle: 90,
-      left: this.canvas.width / 2,
-      top: this.canvas.height / 2
-    });
-    this.canvas.add(triangle);
-    this.canvas.setActiveObject(triangle);
-  },
-
   setBackgroundImage(dataUrl, fitMode = 'fit') {
-    fabric.Image.fromURL(dataUrl, (img) => {
-      let scale;
-      if (fitMode === 'fill') {
-        const scaleX = this.canvas.width / img.width;
-        const scaleY = this.canvas.height / img.height;
-        scale = Math.max(scaleX, scaleY);
-      } else if (fitMode === 'fit') {
-        const scaleX = this.canvas.width / img.width;
-        const scaleY = this.canvas.height / img.height;
-        scale = Math.min(scaleX, scaleY);
-      } else {
-        scale = 1;
-      }
+    // Remove previous background image if exists
+    if (this.currentImageObject) {
+      this.canvas.remove(this.currentImageObject);
+    }
 
-      img.set({
-        originX: 'center',
-        originY: 'center',
-        left: this.canvas.width / 2,
-        top: this.canvas.height / 2,
-        scaleX: scale,
-        scaleY: scale
-      });
+    fabric.Image.fromURL(dataUrl, (img) => {
+      this.currentImageObject = img;
+      this.fitCurrentImage(fitMode);
 
       this.canvas.add(img);
-      this.canvas.sendToBack(img);
       this.canvas.setActiveObject(img);
       this.canvas.renderAll();
     });
   },
 
-  bringForward() {
-    const active = this.canvas.getActiveObject();
-    if (active) {
-      this.canvas.bringForward(active);
-      this.canvas.renderAll();
-    }
-  },
+  fitCurrentImage(fitMode = 'fit') {
+    if (!this.currentImageObject) return;
+    const img = this.currentImageObject;
 
-  sendBackward() {
-    const active = this.canvas.getActiveObject();
-    if (active) {
-      this.canvas.sendBackwards(active);
-      this.canvas.renderAll();
+    let scale = 1;
+    if (fitMode === 'fill') {
+      const scaleX = this.canvas.width / img.width;
+      const scaleY = this.canvas.height / img.height;
+      scale = Math.max(scaleX, scaleY);
+    } else if (fitMode === 'fit') {
+      const scaleX = this.canvas.width / img.width;
+      const scaleY = this.canvas.height / img.height;
+      scale = Math.min(scaleX, scaleY);
     }
-  },
 
-  duplicateActive() {
-    const active = this.canvas.getActiveObject();
-    if (active) {
-      active.clone((cloned) => {
-        cloned.set({
-          left: active.left + 20,
-          top: active.top + 20
-        });
-        this.canvas.add(cloned);
-        this.canvas.setActiveObject(cloned);
-        this.canvas.renderAll();
-      });
-    }
+    img.set({
+      originX: 'center',
+      originY: 'center',
+      left: this.canvas.width / 2,
+      top: this.canvas.height / 2,
+      scaleX: scale,
+      scaleY: scale
+    });
+
+    this.onSelectionChange(img);
+    this.canvas.renderAll();
   },
 
   deleteActive() {
     const active = this.canvas.getActiveObject();
     if (active) {
+      if (active === this.currentImageObject) {
+        this.currentImageObject = null;
+      }
       this.canvas.remove(active);
       this.canvas.discardActiveObject();
       this.canvas.renderAll();
@@ -305,10 +203,12 @@ const CanvasEngine = {
 
   clear() {
     this.canvas.clear();
+    this.currentImageObject = null;
     if (this.isTransparentBg) {
       this.canvas.setBackgroundColor(null, () => this.canvas.renderAll());
     } else {
-      this.canvas.setBackgroundColor('#ffffff', () => this.canvas.renderAll());
+      const pickerColor = document.getElementById('canvas-bg-color-picker')?.value || '#ffffff';
+      this.canvas.setBackgroundColor(pickerColor, () => this.canvas.renderAll());
     }
   }
 };

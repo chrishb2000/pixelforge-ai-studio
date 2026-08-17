@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PixelForge AI Studio - AI Image Upscaling & Canva Graphic Design Suite</title>
+  <title>PixelForge AI Studio - AI Image Upscaling, Resizing & Transparency Suite</title>
   <link rel="stylesheet" href="styles/main.css">
   <!-- Fabric.js Canvas Engine CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
@@ -15,7 +15,7 @@
       <div class="brand-section">
         <div class="brand-logo">PF</div>
         <div class="brand-title">PixelForge AI Studio</div>
-        <span class="brand-badge">v1.0 Pro</span>
+        <span class="brand-badge">v1.1 Pro</span>
       </div>
 
       <div class="preset-selector-group">
@@ -54,7 +54,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          Exportar Diseño
+          Exportar Imagen
         </button>
       </div>
     </header>
@@ -68,22 +68,22 @@
             <svg viewBox="0 0 24 24"><path d="M13 3L4 14h7v7l9-11h-6v-7z"/></svg>
             Escalar IA
           </button>
-          <button class="tab-btn" data-tab="tab-text">
-            <svg viewBox="0 0 24 24"><path d="M5 4v3h5v12h3V7h5V4H5z"/></svg>
-            Texto
+
+          <button class="tab-btn" data-tab="tab-resize">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>
+            Redimensión
           </button>
-          <button class="tab-btn" data-tab="tab-elements">
-            <svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z M4 13h7v7H4z M13 13h7v7h-7z"/></svg>
-            Elementos
-          </button>
+
           <button class="tab-btn" data-tab="tab-bgremover">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            Fondo
+            Transparencia
           </button>
+
           <button class="tab-btn" data-tab="tab-filters">
             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             Filtros
           </button>
+
           <button class="tab-btn" data-tab="tab-watermark">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
             Marca Agua
@@ -94,7 +94,7 @@
           <!-- TAB 1: AI UPSCALE -->
           <section id="tab-upscale" class="panel-section active">
             <div class="section-title">Escalador por IA (Super-Resolution)</div>
-            <p class="section-subtitle">Mejora y aumenta la resolución de tus imágenes sin perder calidad.</p>
+            <p class="section-subtitle">Aumenta la resolución y nitidez de tus imágenes por Inteligencia Artificial.</p>
 
             <div class="form-group">
               <label class="form-label">Seleccionar Imagen Base</label>
@@ -102,9 +102,9 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">Ajuste de Tamaño de Imagen</label>
+              <label class="form-label">Ajuste al Cargar Imagen</label>
               <select id="image-fit-mode-select" class="form-control">
-                <option value="fit">Escalar y Ajustar al Lienzo (Fit)</option>
+                <option value="fit">Escalar y Encajar al Lienzo (Fit)</option>
                 <option value="fill">Rellenar Lienzo Completo (Fill)</option>
                 <option value="original">Mantener Escala Original</option>
               </select>
@@ -123,7 +123,7 @@
                 </div>
                 <div class="option-card" data-scale="8">
                   <span class="option-title">8x Extreme</span>
-                  <span class="option-desc">Máximo detalle 4K/8K</span>
+                  <span class="option-desc">Detalle 4K/8K</span>
                 </div>
               </div>
             </div>
@@ -149,79 +149,60 @@
             </button>
           </section>
 
-          <!-- TAB 2: TEXT STUDIO -->
-          <section id="tab-text" class="panel-section">
-            <div class="section-title">Estudio de Tipografía (Canva Text)</div>
-            <p class="section-subtitle">Añade títulos impactantes y subtítulos estilizados.</p>
+          <!-- TAB 2: REDIMENSION & LIENZO -->
+          <section id="tab-resize" class="panel-section">
+            <div class="section-title">Redimensión Exacta & Densidad DPI</div>
+            <p class="section-subtitle">Configura el tamaño del lienzo en píxeles y la densidad DPI/PPI para impresión o web.</p>
 
             <div class="grid-2">
-              <button id="add-heading-btn" class="btn btn-secondary">+ Título Principal</button>
-              <button id="add-subheading-btn" class="btn btn-secondary">+ Subtítulo</button>
+              <div class="form-group">
+                <label class="form-label">Ancho (px)</label>
+                <input type="number" id="sidebar-width-input" value="1920" min="100" max="10000" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Alto (px)</label>
+                <input type="number" id="sidebar-height-input" value="1080" min="100" max="10000" class="form-control">
+              </div>
             </div>
-            <button id="add-body-btn" class="btn btn-secondary" style="width: 100%;">+ Texto Normal</button>
 
             <div class="form-group">
-              <label class="form-label">Fuente de Google Fonts</label>
-              <select id="font-family-select" class="form-control">
-                <option value="Inter">Inter (Moderna & Limpia)</option>
-                <option value="Montserrat">Montserrat (Negrita & Titulares)</option>
-                <option value="Poppins">Poppins (Redondeada & Amigable)</option>
-                <option value="Oswald">Oswald (Condensada & Impactante)</option>
-                <option value="Playfair Display">Playfair Display (Elegante & Serif)</option>
-                <option value="Pacifico">Pacifico (Manuscrita / Cursiva)</option>
+              <label class="form-label">Densidad DPI / PPI</label>
+              <select id="sidebar-dpi-select" class="form-control">
+                <option value="400">400 DPI (Merch / Impresión Ultra HD)</option>
+                <option value="300">300 DPI (Estándar Impresión / POD)</option>
+                <option value="150">150 DPI (Impresión Media)</option>
+                <option value="72">72 DPI (Pantalla / Web)</option>
               </select>
             </div>
 
+            <button id="apply-sidebar-dim-btn" class="btn btn-primary" style="width: 100%;">
+              📐 Aplicar Dimensiones al Lienzo
+            </button>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+
+            <div class="section-title">Ajustar Imagen al Lienzo</div>
             <div class="grid-2">
-              <div class="form-group">
-                <label class="form-label">Color de Texto</label>
-                <input type="color" id="text-color-input" value="#ffffff" class="form-control" style="height: 38px; padding: 2px;">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Fondo Destacado</label>
-                <input type="color" id="text-bg-color-input" value="#6366f1" class="form-control" style="height: 38px; padding: 2px;">
-              </div>
+              <button id="fit-image-btn" class="btn btn-secondary">🔍 Encajar (Fit)</button>
+              <button id="fill-image-btn" class="btn btn-secondary">🖥️ Rellenar (Fill)</button>
             </div>
           </section>
 
-          <!-- TAB 3: GRAPHIC ELEMENTS -->
-          <section id="tab-elements" class="panel-section">
-            <div class="section-title">Elementos Gráficos y Formas</div>
-            <p class="section-subtitle">Inserta rectángulos, círculos, insignias y cintas.</p>
-
-            <div class="grid-2">
-              <button id="add-rect-btn" class="btn btn-secondary">⬛ Rectángulo</button>
-              <button id="add-circle-btn" class="btn btn-secondary">⚪ Círculo</button>
-              <button id="add-badge-btn" class="btn btn-secondary">⭐ Insignia Badge</button>
-              <button id="add-arrow-btn" class="btn btn-secondary">➡️ Flecha Promo</button>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Color del Elemento</label>
-              <input type="color" id="element-color-input" value="#6366f1" class="form-control" style="height: 38px; padding: 2px;">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Opacidad: <span id="element-opacity-val">100%</span></label>
-              <input type="range" id="element-opacity-range" min="10" max="100" value="100">
-            </div>
-          </section>
-
-          <!-- TAB 4: BG REMOVER & TRANSPARENCY -->
+          <!-- TAB 3: TRANSPARENCIA & FONDO -->
           <section id="tab-bgremover" class="panel-section">
-            <div class="section-title">Fondo y Transparencia del Lienzo</div>
-            <p class="section-subtitle">Configura fondos transparentes PNG o elimina fondos de imágenes.</p>
+            <div class="section-title">Transparencia y Fondo</div>
+            <p class="section-subtitle">Exporta imágenes en PNG con fondo transparente alfa o elimina fondos sólidos.</p>
 
             <div class="form-group">
               <label class="form-label">Modo de Fondo del Lienzo</label>
               <div class="grid-2">
-                <button id="set-bg-solid-btn" class="btn btn-secondary">🎨 Color Sólido</button>
                 <button id="set-bg-transparent-btn" class="btn btn-primary">🏁 Transparente (PNG)</button>
+                <button id="set-bg-solid-btn" class="btn btn-secondary">🎨 Color Sólido</button>
               </div>
             </div>
 
             <div class="form-group" id="canvas-bg-color-group">
-              <label class="form-label">Color de Fondo del Lienzo</label>
+              <label class="form-label">Color de Fondo</label>
               <input type="color" id="canvas-bg-color-picker" value="#ffffff" class="form-control" style="height: 38px; padding: 2px;">
             </div>
 
@@ -229,7 +210,7 @@
 
             <div class="section-title">Eliminador de Fondo de Imagen (Croma)</div>
             <div class="form-group">
-              <label class="form-label">Color a Eliminar de la Imagen</label>
+              <label class="form-label">Color a Eliminar</label>
               <input type="color" id="bg-remove-color" value="#ffffff" class="form-control" style="height: 38px; padding: 2px;">
             </div>
 
@@ -243,7 +224,7 @@
             </button>
           </section>
 
-          <!-- TAB 5: FILTERS & COLOR GRADINGS -->
+          <!-- TAB 4: FILTROS & COLOR -->
           <section id="tab-filters" class="panel-section">
             <div class="section-title">Filtros y Retoque Fotográfico</div>
             <p class="section-subtitle">Aplica estilos cromáticos y ajustes de tono.</p>
@@ -281,10 +262,10 @@
             </div>
           </section>
 
-          <!-- TAB 6: WATERMARK STUDIO -->
+          <!-- TAB 5: MARCA DE AGUA -->
           <section id="tab-watermark" class="panel-section">
             <div class="section-title">Generador de Marcas de Agua</div>
-            <p class="section-subtitle">Protege tu trabajo con texto o logos repetidos.</p>
+            <p class="section-subtitle">Protege tu trabajo con texto repetido en opacidad.</p>
 
             <div class="form-group">
               <label class="form-label">Texto de Marca de Agua</label>
@@ -308,8 +289,6 @@
         <!-- Canvas Bar -->
         <div class="workbench-toolbar">
           <div class="tool-group">
-            <button id="undo-btn" class="btn btn-icon" title="Deshacer (Ctrl+Z)">↩️</button>
-            <button id="redo-btn" class="btn btn-icon" title="Rehacer (Ctrl+Y)">↪️</button>
             <button id="clear-canvas-btn" class="btn btn-secondary" style="font-size: 12px;">Limpiar Lienzo</button>
           </div>
 
@@ -344,29 +323,25 @@
         </div>
       </main>
 
-      <!-- Right Inspector Panel -->
+      <!-- Right Inspector Panel for Image Properties -->
       <aside class="inspector">
-        <div class="inspector-title">Propiedades de Capa</div>
+        <div class="inspector-title">Propiedades de Imagen</div>
 
         <div id="no-selection-msg" style="font-size: 12px; color: var(--text-muted);">
-          Haz clic en un objeto del lienzo para editar sus propiedades.
+          Carga una imagen o haz clic en la imagen del lienzo para ver detalles.
         </div>
 
         <div id="selection-inspector" style="display: none; flex-direction: column; gap: 14px;">
           <div class="form-group">
-            <label class="form-label">Orden de Capa</label>
-            <div class="grid-2">
-              <button id="bring-forward-btn" class="btn btn-secondary">⬆️ Traer al Frente</button>
-              <button id="send-backward-btn" class="btn btn-secondary">⬇️ Enviar Atrás</button>
+            <label class="form-label">Dimensiones Actuales de la Imagen</label>
+            <div id="img-props-text" style="font-size: 12px; color: var(--text-main); background: var(--bg-tertiary); padding: 10px; border-radius: 6px;">
+              -
             </div>
           </div>
 
           <div class="form-group">
             <label class="form-label">Acciones</label>
-            <div class="grid-2">
-              <button id="duplicate-obj-btn" class="btn btn-secondary">📋 Duplicar</button>
-              <button id="delete-obj-btn" class="btn btn-secondary" style="color: var(--danger-color);">🗑️ Borrar</button>
-            </div>
+            <button id="delete-obj-btn" class="btn btn-secondary" style="width: 100%; color: var(--danger-color);">🗑️ Eliminar Imagen</button>
           </div>
         </div>
       </aside>
@@ -430,7 +405,7 @@
   <div id="export-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title">Exportar Diseño Final</h3>
+        <h3 class="modal-title">Exportar Imagen en Formatos Múltiples</h3>
         <button class="modal-close" data-close-modal="export-modal">&times;</button>
       </div>
 
@@ -438,9 +413,9 @@
         <label class="form-label">Formato de Archivo</label>
         <select id="export-format-select" class="form-control">
           <option value="png">PNG (Máxima calidad con transparencia alfa 100%)</option>
-          <option value="jpeg">JPG (Fotografía e imágenes optimizadas)</option>
+          <option value="jpeg">JPG / JPEG (Fotografía e imágenes comprimidas)</option>
           <option value="webp">WebP (Formato web moderno ultraligero)</option>
-          <option value="pdf">PDF (Documento listo para impresión)</option>
+          <option value="pdf">PDF (Documento para impresión)</option>
         </select>
       </div>
 
@@ -471,7 +446,7 @@
       </div>
 
       <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
-        <strong>PixelForge AI Studio v1.0</strong> combina algoritmos de IA de super-resolución con una suite gráfica interactiva para creadores de contenido, diseñadores y profesionales.
+        <strong>PixelForge AI Studio v1.1 Pro</strong> combina escalado por Inteligencia Artificial con redimensión ultra-precisa (hasta 4500x5400 px @ 400 DPI), fondos transparentes PNG y exportación multi-formato.
       </p>
 
       <div style="background-color: var(--bg-tertiary); padding: 14px; border-radius: var(--radius-md); font-size: 13px;">

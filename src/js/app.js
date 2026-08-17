@@ -45,14 +45,35 @@ document.addEventListener('DOMContentLoaded', () => {
     customDimModal?.classList.add('active');
   });
 
-  // Apply Custom Dimensions Handler
+  // Apply Custom Dimensions (Modal & Sidebar)
+  const applyDimensions = (w, h, dpi) => {
+    CanvasEngine.setPresetResolution(w, h, dpi);
+  };
+
   document.getElementById('apply-custom-dim-btn')?.addEventListener('click', () => {
     const width = parseInt(document.getElementById('custom-width-input').value) || 4500;
     const height = parseInt(document.getElementById('custom-height-input').value) || 5400;
     const dpi = parseInt(document.getElementById('custom-dpi-select').value) || 400;
 
-    CanvasEngine.setPresetResolution(width, height, dpi);
+    applyDimensions(width, height, dpi);
     customDimModal?.classList.remove('active');
+  });
+
+  document.getElementById('apply-sidebar-dim-btn')?.addEventListener('click', () => {
+    const width = parseInt(document.getElementById('sidebar-width-input').value) || 1920;
+    const height = parseInt(document.getElementById('sidebar-height-input').value) || 1080;
+    const dpi = parseInt(document.getElementById('sidebar-dpi-select').value) || 72;
+
+    applyDimensions(width, height, dpi);
+  });
+
+  // Fit / Fill Image Buttons
+  document.getElementById('fit-image-btn')?.addEventListener('click', () => {
+    CanvasEngine.fitCurrentImage('fit');
+  });
+
+  document.getElementById('fill-image-btn')?.addEventListener('click', () => {
+    CanvasEngine.fitCurrentImage('fill');
   });
 
   // Transparent Background Toggle Buttons
@@ -130,63 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Text Studio Handlers
-  document.getElementById('add-heading-btn')?.addEventListener('click', () => CanvasEngine.addHeadingText());
-  document.getElementById('add-subheading-btn')?.addEventListener('click', () => CanvasEngine.addSubheadingText());
-  document.getElementById('add-body-btn')?.addEventListener('click', () => CanvasEngine.addBodyText());
-
-  document.getElementById('font-family-select')?.addEventListener('change', (e) => {
-    const active = CanvasEngine.canvas.getActiveObject();
-    if (active && (active.type === 'i-text' || active.type === 'text')) {
-      active.set('fontFamily', e.target.value);
-      CanvasEngine.canvas.renderAll();
-    }
-  });
-
-  document.getElementById('text-color-input')?.addEventListener('input', (e) => {
-    const active = CanvasEngine.canvas.getActiveObject();
-    if (active && (active.type === 'i-text' || active.type === 'text')) {
-      active.set('fill', e.target.value);
-      CanvasEngine.canvas.renderAll();
-    }
-  });
-
-  document.getElementById('text-bg-color-input')?.addEventListener('input', (e) => {
-    const active = CanvasEngine.canvas.getActiveObject();
-    if (active && (active.type === 'i-text' || active.type === 'text')) {
-      active.set('textBackgroundColor', e.target.value);
-      CanvasEngine.canvas.renderAll();
-    }
-  });
-
-  // Graphic Elements Handlers
-  document.getElementById('add-rect-btn')?.addEventListener('click', () => CanvasEngine.addRectangle());
-  document.getElementById('add-circle-btn')?.addEventListener('click', () => CanvasEngine.addCircle());
-  document.getElementById('add-badge-btn')?.addEventListener('click', () => CanvasEngine.addBadge());
-  document.getElementById('add-arrow-btn')?.addEventListener('click', () => CanvasEngine.addArrow());
-
-  document.getElementById('element-color-input')?.addEventListener('input', (e) => {
-    const active = CanvasEngine.canvas.getActiveObject();
-    if (active) {
-      active.set('fill', e.target.value);
-      CanvasEngine.canvas.renderAll();
-    }
-  });
-
-  const elementOpacityRange = document.getElementById('element-opacity-range');
-  const elementOpacityVal = document.getElementById('element-opacity-val');
-  if (elementOpacityRange && elementOpacityVal) {
-    elementOpacityRange.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value);
-      elementOpacityVal.textContent = `${val}%`;
-      const active = CanvasEngine.canvas.getActiveObject();
-      if (active) {
-        active.set('opacity', val / 100);
-        CanvasEngine.canvas.renderAll();
-      }
-    });
-  }
-
   // Background Remover Handler
   document.getElementById('apply-bg-remove-btn')?.addEventListener('click', () => {
     const colorHex = document.getElementById('bg-remove-color').value;
@@ -228,15 +192,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Inspector Layer Handlers
-  document.getElementById('bring-forward-btn')?.addEventListener('click', () => CanvasEngine.bringForward());
-  document.getElementById('send-backward-btn')?.addEventListener('click', () => CanvasEngine.sendBackward());
-  document.getElementById('duplicate-obj-btn')?.addEventListener('click', () => CanvasEngine.duplicateActive());
   document.getElementById('delete-obj-btn')?.addEventListener('click', () => CanvasEngine.deleteActive());
 
-  // Keyboard Shortcuts (Delete Key & Backspace Key to delete selected object)
+  // Keyboard Shortcuts (Delete Key & Backspace Key)
   window.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
-      return; // Do not interrupt typing in input fields
+      return;
     }
 
     if (e.key === 'Delete' || e.key === 'Backspace') {

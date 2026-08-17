@@ -1,6 +1,6 @@
-# 🚀 PixelForge AI Studio v1.0
+# 🚀 PixelForge AI Studio v1.1 Pro
 
-**PixelForge AI Studio** es una potente aplicación de escritorio para Windows que evoluciona el concepto de super-resolución de imágenes por Inteligencia Artificial combinándolo con una suite completa de **diseño gráfico al estilo Canva**. Permite realizar super-resolución por IA (2x, 4x, 8x, UltraSharp, Digital Art, Photo Restore), aislamiento de fondos transparentes PNG (alfa 100%), retoque fotográfico avanzado, capas de texto estilizado, insignias vectoriales, marcas de agua y exportación en calidad Ultra HD / 4K a cualquier resolución personalizada (ej. 4500 x 5400 px @ 400 DPI para Merch / POD / Impresión).
+**PixelForge AI Studio** es una potente aplicación de escritorio para Windows centrada en el **escalado por Inteligencia Artificial, redimensión de alta precisión y gestión de transparencias**. Permite realizar super-resolución por IA (2x, 4x, 8x, UltraSharp, Digital Art, Photo Restore), redimensionar imágenes a resoluciones personalizadas exactas (p. ej. 4500 x 5400 px @ 400 DPI para Merch / POD / Impresión), aislar fondos transparentes PNG con canal alfa 100%, aplicar retoques cromáticos y exportar en múltiples formatos (PNG, JPG, WebP, PDF).
 
 ![PixelForge AI Studio](https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
@@ -30,8 +30,6 @@
 
 ## 📋 Prerrequisitos de Sistema
 
-Para ejecutar **PixelForge AI Studio** en tu equipo Windows, necesitas cumplir con los siguientes requisitos mínimos:
-
 - **Sistema Operativo**: Windows 10 / Windows 11 (64-bit).
 - **Entorno de Ejecución** *(Solo para la Opción 2 / modo script)*: **Node.js v18.0.0 o superior** (Recomendado Node.js LTS v24+).
   - 📥 [Descargar Node.js LTS Oficial](https://nodejs.org/)
@@ -40,18 +38,9 @@ Para ejecutar **PixelForge AI Studio** en tu equipo Windows, necesitas cumplir c
 
 ---
 
-## 🌟 Características Destacadas
+## 🌟 Funciones Principales
 
-### 📐 Dimensiones Personalizadas & Impresión POD / Merch (4500x5400 @ 400 DPI)
-- **Preset Especializado para Merch / POD**: Preset predefinido **`Personalizado Print/POD (4500x5400 @ 400 DPI)`**.
-- **Modal de Dimensiones a la Medida**: Introduce cualquier resolución de 100x100 a 10.000x10.000 píxeles y configura la densidad DPI (400 DPI Ultra HD, 300 DPI, 150 DPI, 72 DPI).
-- **Modos de Ajuste de Imagen**: Ajustar al lienzo (*Fit*), Rellenar lienzo (*Fill*) o Mantener escala original.
-
-### 🏁 Lienzo Transparente y Exportación PNG Alfa
-- **Previsualización con Damero (Checkerboard)**: Botón de conmutación rápida `Fondo Transparente: ON (PNG Alfa)` con vista de rejilla transparente.
-- **Exportación Alfa 100%**: Descarga imágenes en PNG transparente sin residuos blancos alrededor del sujeto.
-
-### ⚡ Motor de Escalado por Inteligencia Artificial (Super-Resolution Studio)
+### ⚡ 1. Escalador por Inteligencia Artificial (Super-Resolution Studio)
 - **Factores de Escalado**: 2x, 4x y 8x con preservación de bordes y texturas.
 - **Modelos de IA Especializados**:
   - *UltraSharp Pro*: Para fotografía hiper-detallada y arquitectura.
@@ -59,16 +48,24 @@ Para ejecutar **PixelForge AI Studio** en tu equipo Windows, necesitas cumplir c
   - *Photo Restoration*: Recuperación de fotos antiguas y reducción de grano JPEG.
   - *Color Restorer*: Enriquecimiento de tonos y contraste dinámico.
   - *De-Noise & Soften*: Eliminación de artefactos y grano ISO.
-- **Visor Comparativo Interactivo**: Deslizador split-screen Antes/Después para evaluar los detalles en tiempo real.
+- **Visor Comparativo Interactivo**: Deslizador split-screen Antes/Después en tiempo real.
 
-### 🎨 Estudio de Diseño Gráfico Estilo Canva
-- **Lienzo Interactivo HTML5 (Fabric.js)**: Capas libres drag-and-drop, rotación, redimensionamiento y duplicado de elementos.
-- **Estudio de Tipografía Profesional**: Integración con Google Fonts, sombras de texto, contornos, fondo de texto pill destacado y texto en curva.
-- **Insignias y Elementos Gráficos**: Formas geométricas, marcos, flechas, cintas promocionales y pegatinas.
-- **Eliminación de Fondo Inteligente**: Croma/Color Keying para borrar fondos sólidos o seleccionar colores a eliminar.
-- **Filtros Fotográficos y Color Grading**: Presets visuales (Cyberpunk, Vintage, Golden Hour, Emerald) y controles finos de brillo, contraste, saturación, tono, desenfoque y viñeta.
-- **Generador de Marcas de Agua**: Superposición de logo o texto con patrón de repetición en rejilla, control de ángulo y opacidad.
-- **Atajos de Teclado**: Presiona `Supr` o `Backspace` para eliminar objetos seleccionados en el lienzo.
+### 📐 2. Redimensión Ultra-Precisa & Densidad DPI (Merch / POD / Impresión)
+- **Preset Especializado para Impresión**: Preset predefinido **`Personalizado Print/POD (4500x5400 @ 400 DPI)`**.
+- **Dimensiones a la Medida**: Configura cualquier resolución de 100x100 a 10.000x10.000 píxeles y la densidad DPI (400 DPI Ultra HD, 300 DPI, 150 DPI, 72 DPI Web).
+- **Modos de Ajuste**: Encajar al lienzo (*Fit*), Rellenar lienzo (*Fill*) o Mantener escala original.
+
+### 🏁 3. Fondo Transparente PNG Alfa & Eliminación de Fondo Croma
+- **Vista Previa con Damero (Checkerboard)**: Botón de conmutación rápida `Fondo Transparente: ON (PNG Alfa)` con cuadrícula de transparencia.
+- **Exportación Alfa 100%**: Descarga imágenes en PNG transparente sin residuos blancos.
+- **Eliminador de Fondo Croma**: Herramienta para borrar fondos sólidos especificando color y nivel de tolerancia.
+
+### 🎭 4. Filtros Fotográficos y Retoque de Imagen
+- **Presets Cromáticos**: Cyberpunk, Vintage Sepia, Golden Hour, Esmeralda, Monocromo y Normal.
+- **Ajustes Finos**: Controladores de Brillo, Contraste, Saturación y Desenfoque (Blur).
+
+### 💾 5. Exportación en Varios Formatos
+- **Formatos Disponibles**: PNG (con transparencia alfa), JPG / JPEG (con barra de compresión de calidad), WebP (formato web ligero) y PDF.
 
 ---
 
@@ -77,7 +74,7 @@ Para ejecutar **PixelForge AI Studio** en tu equipo Windows, necesitas cumplir c
 Si deseas compilar tu propio ejecutable binario de Windows desde el código fuente:
 
 ```bash
-# Instalar dependencias de desarrollo
+# Instalar dependencias
 npm install
 
 # Ejecutar en modo desarrollo
