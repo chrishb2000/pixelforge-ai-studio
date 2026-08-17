@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "echo Built successfully"
+    "package-win": "electron-packager . PixelForge-AI-Studio --platform=win32 --arch=x64 --out=dist --overwrite"
   },
   "keywords": [
     "ai",
@@ -20,7 +20,8 @@
   "author": "Christian Herencia (https://christian-freelance.us/)",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^28.2.0"
+    "electron": "^28.2.0",
+    "electron-packager": "^17.1.2"
   },
   "dependencies": {
     "fabric": "^5.3.0"

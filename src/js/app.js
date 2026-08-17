@@ -151,11 +151,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  document.getElementById('text-bg-color-input')?.addEventListener('input', (e) => {
+    const active = CanvasEngine.canvas.getActiveObject();
+    if (active && (active.type === 'i-text' || active.type === 'text')) {
+      active.set('textBackgroundColor', e.target.value);
+      CanvasEngine.canvas.renderAll();
+    }
+  });
+
   // Graphic Elements Handlers
   document.getElementById('add-rect-btn')?.addEventListener('click', () => CanvasEngine.addRectangle());
   document.getElementById('add-circle-btn')?.addEventListener('click', () => CanvasEngine.addCircle());
   document.getElementById('add-badge-btn')?.addEventListener('click', () => CanvasEngine.addBadge());
   document.getElementById('add-arrow-btn')?.addEventListener('click', () => CanvasEngine.addArrow());
+
+  document.getElementById('element-color-input')?.addEventListener('input', (e) => {
+    const active = CanvasEngine.canvas.getActiveObject();
+    if (active) {
+      active.set('fill', e.target.value);
+      CanvasEngine.canvas.renderAll();
+    }
+  });
+
+  const elementOpacityRange = document.getElementById('element-opacity-range');
+  const elementOpacityVal = document.getElementById('element-opacity-val');
+  if (elementOpacityRange && elementOpacityVal) {
+    elementOpacityRange.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value);
+      elementOpacityVal.textContent = `${val}%`;
+      const active = CanvasEngine.canvas.getActiveObject();
+      if (active) {
+        active.set('opacity', val / 100);
+        CanvasEngine.canvas.renderAll();
+      }
+    });
+  }
 
   // Background Remover Handler
   document.getElementById('apply-bg-remove-btn')?.addEventListener('click', () => {
@@ -202,6 +232,20 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('send-backward-btn')?.addEventListener('click', () => CanvasEngine.sendBackward());
   document.getElementById('duplicate-obj-btn')?.addEventListener('click', () => CanvasEngine.duplicateActive());
   document.getElementById('delete-obj-btn')?.addEventListener('click', () => CanvasEngine.deleteActive());
+
+  // Keyboard Shortcuts (Delete Key & Backspace Key to delete selected object)
+  window.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+      return; // Do not interrupt typing in input fields
+    }
+
+    if (e.key === 'Delete' || e.key === 'Backspace') {
+      const active = CanvasEngine.canvas.getActiveObject();
+      if (active && !active.isEditing) {
+        CanvasEngine.deleteActive();
+      }
+    }
+  });
 
   // Canvas Toolbar Handlers
   document.getElementById('clear-canvas-btn')?.addEventListener('click', () => {
