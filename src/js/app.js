@@ -30,9 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (openCustomDimBtn) openCustomDimBtn.style.display = (val === 'custom') ? 'inline-flex' : 'none';
 
       if (val === 'youtube-thumb') CanvasEngine.setPresetResolution(1920, 1080, 72);
+      else if (val === 'youtube-profile') CanvasEngine.setPresetResolution(800, 800, 72);
+      else if (val === 'youtube-banner') CanvasEngine.setPresetResolution(2560, 1440, 72);
+      else if (val === 'tiktok-video') CanvasEngine.setPresetResolution(1080, 1920, 72);
+      else if (val === 'tiktok-profile') CanvasEngine.setPresetResolution(200, 200, 72);
       else if (val === 'insta-post') CanvasEngine.setPresetResolution(1080, 1080, 72);
+      else if (val === 'insta-portrait') CanvasEngine.setPresetResolution(1080, 1350, 72);
       else if (val === 'insta-story') CanvasEngine.setPresetResolution(1080, 1920, 72);
-      else if (val === 'banner') CanvasEngine.setPresetResolution(1200, 400, 72);
+      else if (val === 'insta-profile') CanvasEngine.setPresetResolution(320, 320, 72);
+      else if (val === 'facebook-post') CanvasEngine.setPresetResolution(1200, 630, 72);
+      else if (val === 'facebook-cover') CanvasEngine.setPresetResolution(820, 312, 72);
+      else if (val === 'facebook-profile') CanvasEngine.setPresetResolution(170, 170, 72);
+      else if (val === 'twitter-post') CanvasEngine.setPresetResolution(1200, 675, 72);
+      else if (val === 'twitter-header') CanvasEngine.setPresetResolution(1500, 500, 72);
+      else if (val === 'twitter-profile') CanvasEngine.setPresetResolution(400, 400, 72);
+      else if (val === 'twitch-banner') CanvasEngine.setPresetResolution(1200, 480, 72);
+      else if (val === 'twitch-profile') CanvasEngine.setPresetResolution(800, 800, 72);
+      else if (val === 'linkedin-post') CanvasEngine.setPresetResolution(1200, 627, 72);
+      else if (val === 'linkedin-banner') CanvasEngine.setPresetResolution(1584, 396, 72);
       else if (val === 'custom-print') CanvasEngine.setPresetResolution(4500, 5400, 400);
       else if (val === 'custom') {
         customDimModal?.classList.add('active');

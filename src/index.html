@@ -21,12 +21,43 @@
       <div class="preset-selector-group">
         <label for="canvas-preset">Lienzo:</label>
         <select id="canvas-preset" class="select-input">
-          <option value="youtube-thumb">YouTube Thumbnail (1920x1080)</option>
-          <option value="insta-post">Instagram Post (1080x1080)</option>
-          <option value="insta-story">Instagram Story (1080x1920)</option>
-          <option value="banner">Banner Promocional (1200x400)</option>
-          <option value="custom-print">Personalizado Print/POD (4500x5400 @ 400 DPI)</option>
-          <option value="custom">Dimensiones Personalizadas...</option>
+          <optgroup label="🔴 YouTube">
+            <option value="youtube-thumb">Miniatura de YouTube (1920×1080)</option>
+            <option value="youtube-profile">Foto de Perfil YouTube (800×800)</option>
+            <option value="youtube-banner">Banner de Canal YouTube (2560×1440)</option>
+          </optgroup>
+          <optgroup label="🎵 TikTok">
+            <option value="tiktok-video">TikTok Video / Short (1080×1920)</option>
+            <option value="tiktok-profile">Foto de Perfil TikTok (200×200)</option>
+          </optgroup>
+          <optgroup label="📸 Instagram">
+            <option value="insta-post">Instagram Post Cuadrado (1080×1080)</option>
+            <option value="insta-portrait">Instagram Post Retrato (1080×1350)</option>
+            <option value="insta-story">Instagram Story / Reel (1080×1920)</option>
+            <option value="insta-profile">Foto de Perfil Instagram (320×320)</option>
+          </optgroup>
+          <optgroup label="🔵 Facebook">
+            <option value="facebook-post">Post de Facebook (1200×630)</option>
+            <option value="facebook-cover">Portada de Facebook (820×312)</option>
+            <option value="facebook-profile">Foto de Perfil Facebook (170×170)</option>
+          </optgroup>
+          <optgroup label="🐦 Twitter / X">
+            <option value="twitter-post">Post de Twitter / X (1200×675)</option>
+            <option value="twitter-header">Encabezado de Twitter / X (1500×500)</option>
+            <option value="twitter-profile">Foto de Perfil Twitter / X (400×400)</option>
+          </optgroup>
+          <optgroup label="🟣 Twitch">
+            <option value="twitch-banner">Banner de Canal Twitch (1200×480)</option>
+            <option value="twitch-profile">Foto de Perfil Twitch (800×800)</option>
+          </optgroup>
+          <optgroup label="💼 LinkedIn">
+            <option value="linkedin-post">Post de LinkedIn (1200×627)</option>
+            <option value="linkedin-banner">Portada de LinkedIn (1584×396)</option>
+          </optgroup>
+          <optgroup label="👕 Impresión & Merch">
+            <option value="custom-print">Personalizado Print/POD (4500×5400 @ 400 DPI)</option>
+            <option value="custom">Dimensiones Personalizadas...</option>
+          </optgroup>
         </select>
 
         <button id="open-custom-dim-btn" class="btn btn-icon" title="Configurar Dimensiones Exactas y DPI" style="width: 28px; height: 28px; display: none;">⚙️</button>

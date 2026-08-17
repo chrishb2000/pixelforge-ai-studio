@@ -50,8 +50,16 @@
   - *De-Noise & Soften*: Eliminación de artefactos y grano ISO.
 - **Visor Comparativo Interactivo**: Deslizador split-screen Antes/Después en tiempo real.
 
-### 📐 2. Redimensión Ultra-Precisa & Densidad DPI (Merch / POD / Impresión)
-- **Preset Especializado para Impresión**: Preset predefinido **`Personalizado Print/POD (4500x5400 @ 400 DPI)`**.
+### 📐 2. Redimensión & Formatos de Redes Sociales (TikTok, YouTube, Insta, POD)
+- **Formatos Predefinidos por Red Social**:
+  - 🔴 **YouTube**: Miniatura (1920×1080), Perfil (800×800), Banner de Canal (2560×1440).
+  - 🎵 **TikTok**: Video / Short (1080×1920), Foto de Perfil (200×200).
+  - 📸 **Instagram**: Post Cuadrado (1080×1080), Post Retrato (1080×1350), Story / Reel (1080×1920), Perfil (320×320).
+  - 🔵 **Facebook**: Post (1200×630), Portada (820×312), Perfil (170×170).
+  - 🐦 **Twitter / X**: Post (1200×675), Encabezado (1500×500), Perfil (400×400).
+  - 🟣 **Twitch**: Banner (1200×480), Perfil (800×800).
+  - 💼 **LinkedIn**: Post (1200×627), Portada (1584×396).
+  - 👕 **Impresión / Merch POD**: Camisetas (4500×5400 @ 400 DPI).
 - **Dimensiones a la Medida**: Configura cualquier resolución de 100x100 a 10.000x10.000 píxeles y la densidad DPI (400 DPI Ultra HD, 300 DPI, 150 DPI, 72 DPI Web).
 - **Modos de Ajuste**: Encajar al lienzo (*Fit*), Rellenar lienzo (*Fill*) o Mantener escala original.
 
