@@ -207,6 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Inspector Layer Handlers
+  document.getElementById('rotate-cw-btn')?.addEventListener('click', () => CanvasEngine.rotateActiveImage(90));
+  document.getElementById('rotate-ccw-btn')?.addEventListener('click', () => CanvasEngine.rotateActiveImage(-90));
+  document.getElementById('flip-h-btn')?.addEventListener('click', () => CanvasEngine.flipActiveImage('horizontal'));
+  document.getElementById('flip-v-btn')?.addEventListener('click', () => CanvasEngine.flipActiveImage('vertical'));
+  document.getElementById('scale-up-btn')?.addEventListener('click', () => CanvasEngine.scaleActiveImage(1.1));
+  document.getElementById('scale-down-btn')?.addEventListener('click', () => CanvasEngine.scaleActiveImage(0.9));
+  document.getElementById('center-image-btn')?.addEventListener('click', () => CanvasEngine.centerActiveImage());
   document.getElementById('delete-obj-btn')?.addEventListener('click', () => CanvasEngine.deleteActive());
 
   // Keyboard Shortcuts (Delete Key & Backspace Key)

@@ -63,7 +63,14 @@
 - **Dimensiones a la Medida**: Configura cualquier resolución de 100x100 a 10.000x10.000 píxeles y la densidad DPI (500 DPI Ultra HD, 300 DPI, 150 DPI, 72 DPI Web).
 - **Modos de Ajuste**: Encajar al lienzo (*Fit*), Rellenar lienzo (*Fill*) o Mantener escala original.
 
-### 🏁 3. Fondo Transparente PNG Alfa & Eliminación de Fondo Croma
+### 🔄 3. Control Interactivo de Imagen (Rotación, Volteo, Escalado y Centrado)
+- **Transformación Directa en Lienzo**: Haz clic en cualquier imagen para arrastrar sus controles de esquina (escala proporcional), control superior (rotación libre) o mover la imagen por el lienzo.
+- **Herramientas de Precisión**:
+  - 🔄 **Rotación de 90°**: Botones `Girar +90°` y `Girar -90°`.
+  - ↔️ **Volteo Espejo**: Botones `Voltear Horizontal` y `Voltear Vertical`.
+  - ➕ **Escalado Manual**: Botones `Agrandar (+10%)` y `Reducir (-10%)`.
+  - 🎯 **Centrado Automático**: Botón `Centrar en Lienzo`.
+- **Fijación de Posición Exacta**: Se corrigió el origen de coordenadas al aplicar transparencias/eliminación de fondo para mantener la imagen en su posición fija sin desplazamientos.
 - **Vista Previa con Damero (Checkerboard)**: Botón de conmutación rápida `Fondo Transparente: ON (PNG Alfa)` con cuadrícula de transparencia.
 - **Exportación Alfa 100%**: Descarga imágenes en PNG transparente sin residuos blancos.
 - **Eliminador de Fondo Croma**: Herramienta para borrar fondos sólidos especificando color y nivel de tolerancia.

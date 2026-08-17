@@ -139,6 +139,9 @@ const CanvasEngine = {
     this.canvas.on('selection:created', (e) => this.onSelectionChange(e.selected[0]));
     this.canvas.on('selection:updated', (e) => this.onSelectionChange(e.selected[0]));
     this.canvas.on('selection:cleared', () => this.onSelectionCleared());
+    this.canvas.on('object:modified', (e) => this.onSelectionChange(e.target));
+    this.canvas.on('object:scaling', (e) => this.onSelectionChange(e.target));
+    this.canvas.on('object:rotating', (e) => this.onSelectionChange(e.target));
 
     window.addEventListener('resize', () => this.fitCanvasToViewport());
   },
@@ -152,9 +155,10 @@ const CanvasEngine = {
     if (selInspector) selInspector.style.display = 'flex';
 
     if (imgPropsText && obj) {
-      const w = Math.round(obj.width * obj.scaleX);
-      const h = Math.round(obj.height * obj.scaleY);
-      imgPropsText.textContent = `Tamaño: ${w} x ${h} px | Posición: (${Math.round(obj.left)}, ${Math.round(obj.top)})`;
+      const w = Math.round(obj.width * Math.abs(obj.scaleX));
+      const h = Math.round(obj.height * Math.abs(obj.scaleY));
+      const angle = Math.round(obj.angle || 0);
+      imgPropsText.textContent = `Tamaño: ${w} x ${h} px | Ángulo: ${angle}° | Posición: (${Math.round(obj.left)}, ${Math.round(obj.top)})`;
     }
   },
 
@@ -173,6 +177,18 @@ const CanvasEngine = {
 
     fabric.Image.fromURL(dataUrl, (img) => {
       this.currentImageObject = img;
+      
+      // Add interactive control styles
+      img.set({
+        cornerColor: '#6366f1',
+        cornerStyle: 'circle',
+        transparentCorners: false,
+        cornerSize: 14,
+        borderColor: '#6366f1',
+        borderDashArray: [4, 4],
+        padding: 6
+      });
+
       this.fitCurrentImage(fitMode);
 
       this.canvas.add(img);
@@ -202,11 +218,77 @@ const CanvasEngine = {
       left: this.canvas.width / 2,
       top: this.canvas.height / 2,
       scaleX: scale,
-      scaleY: scale
+      scaleY: scale,
+      angle: 0
     });
 
     this.onSelectionChange(img);
     this.canvas.renderAll();
+  },
+
+  rotateActiveImage(angleDegrees) {
+    const active = this.canvas.getActiveObject() || this.currentImageObject;
+    if (active) {
+      const currentAngle = active.angle || 0;
+      active.set('angle', (currentAngle + angleDegrees) % 360);
+      this.onSelectionChange(active);
+      this.canvas.renderAll();
+    }
+  },
+
+  flipActiveImage(axis) {
+    const active = this.canvas.getActiveObject() || this.currentImageObject;
+    if (active) {
+      if (axis === 'horizontal') {
+        active.set('flipX', !active.flipX);
+      } else if (axis === 'vertical') {
+        active.set('flipY', !active.flipY);
+      }
+      this.onSelectionChange(active);
+      this.canvas.renderAll();
+    }
+  },
+
+  scaleActiveImage(multiplier) {
+    const active = this.canvas.getActiveObject() || this.currentImageObject;
+    if (active) {
+      active.set({
+        scaleX: active.scaleX * multiplier,
+        scaleY: active.scaleY * multiplier
+      });
+      this.onSelectionChange(active);
+      this.canvas.renderAll();
+    }
+  },
+
+  centerActiveImage() {
+    const active = this.canvas.getActiveObject() || this.currentImageObject;
+    if (active) {
+      active.set({
+        originX: 'center',
+        originY: 'center',
+        left: this.canvas.width / 2,
+        top: this.canvas.height / 2
+      });
+      this.canvas.setActiveObject(active);
+      this.onSelectionChange(active);
+      this.canvas.renderAll();
+    }
+  },
+
+  selectActiveImage() {
+    if (this.currentImageObject) {
+      this.canvas.setActiveObject(this.currentImageObject);
+      this.onSelectionChange(this.currentImageObject);
+      this.canvas.renderAll();
+    } else {
+      const objects = this.canvas.getObjects();
+      if (objects.length > 0) {
+        this.canvas.setActiveObject(objects[0]);
+        this.onSelectionChange(objects[0]);
+        this.canvas.renderAll();
+      }
+    }
   },
 
   deleteActive() {

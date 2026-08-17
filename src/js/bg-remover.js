@@ -1,7 +1,7 @@
 /* Smart Background Removal Engine */
 const BGRemover = {
   removeColorBackground(targetColorHex, tolerancePercent) {
-    const active = CanvasEngine.canvas.getActiveObject();
+    const active = CanvasEngine.canvas.getActiveObject() || CanvasEngine.currentImageObject;
     if (!active || active.type !== 'image') {
       alert('Por favor selecciona una imagen en el lienzo para eliminar su fondo.');
       return;
@@ -47,12 +47,24 @@ const BGRemover = {
 
     fabric.Image.fromURL(transparentDataUrl, (newImg) => {
       newImg.set({
+        originX: active.originX || 'center',
+        originY: active.originY || 'center',
         left: active.left,
         top: active.top,
         scaleX: active.scaleX,
         scaleY: active.scaleY,
-        angle: active.angle
+        angle: active.angle,
+        cornerColor: '#6366f1',
+        cornerStyle: 'circle',
+        transparentCorners: false,
+        cornerSize: 12,
+        borderColor: '#6366f1',
+        borderDashArray: [4, 4]
       });
+
+      if (active === CanvasEngine.currentImageObject) {
+        CanvasEngine.currentImageObject = newImg;
+      }
 
       CanvasEngine.canvas.remove(active);
       CanvasEngine.canvas.add(newImg);
